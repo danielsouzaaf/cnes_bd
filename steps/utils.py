@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import requests
 from datetime import datetime
 
@@ -46,106 +49,114 @@ def criar_schema(competencia, connection):
     executar_SQL(connection, command)
 
     command = """
-    CREATE TABLE IF NOT EXISTS cnes_%s.equipamentos
-    (
-      cnes character(7) NOT NULL,
-      tipequip character(1),
-      codequip character(2) NOT NULL,
-      qt_exist numeric(4,0),
-      qt_uso numeric(4,0),
-      ind_sus character(1),
-      ind_nsus character(1),
-      CONSTRAINT pk_equipam1 PRIMARY KEY (cnes, codequip)
-    )
-    """ % competencia
-    executar_SQL(connection, command)
-    print "Schema criado"
+    CREATE TABLE IF NOT EXISTS cnes_%s.rl_estab_equipamento (
+    co_unidade character varying(31) NOT NULL,
+    co_equipamento character(2) NOT NULL,
+    co_tipo_equipamento character(1) NOT NULL,
+    qt_existente numeric(3,0),
+    qt_uso numeric(3,0),
+    tp_sus character(1),
+    dt_atualizacao character varying(255) NOT NULL,
+    co_usuario character varying(12) NOT NULL,
+    dt_atualizacao_origem date,
+    dt_cmtp_inicio date,
+    dt_cmtp_fim date,
+    nu_seq_processo numeric(8,0)
+);
 
-    command = """
-    CREATE TABLE IF NOT EXISTS cnes_%s.estabelecimentos
-    (
-      cnes character(7) NOT NULL,
-      codufmun character(6),
-      regsaude character(4),
-      micr_reg character(6),
-      distrsan character(4),
-      distradm character(4),
-      tpgestao character(1),
-      pf_pj character(1),
-      cpf_cnpj character(14),
-      niv_dep character(1),
-      cnpj_man character(14),
-      esfera_a character(2),
-      atividad character(2),
-      retencao character(2),
-      natureza character(2),
-      clientel character(2),
-      tp_unid character(2),
-      turno_at character(2),
-      niv_hier character(2),
-      terceiro character(1),
-      nat_jur character(4),
-      uf character(2),
-      CONSTRAINT pk_est1 PRIMARY KEY (cnes)
-    )
-    """ % competencia
-    executar_SQL(connection, command)
-    print "Tabela estabelecimentos criada"
+    ALTER TABLE cnes_%s.rl_estab_equipamento OWNER TO postgres;
 
-    command = """
-    CREATE TABLE IF NOT EXISTS cnes_%s.profissionais
-    (
-      cpf_prof character(11) NOT NULL,
-      nomeprof character(150),
-      cns_prof character(20),
-      conselho character(2),
-      registro character(20),
-      ufmunres character varying(10),
-      idade integer,
-      data_nascimento date,
-      grupo_idade_id character(1),
-      sexo character(1),
-      uf_residencia character(2),
-      municipio_residencia character varying(100),
-      nomeprof_receita character varying(150),
-      nome_mae_receita character varying(150),
-      raca_id integer,
-      qtd_vinculos_ativos integer,
-      ch_total_ambulatorial integer,
-      ch_total_hospitalar integer,
-      ch_total_outros integer,
-      ch_total_geral integer,
-      ocupacao_principal_uf_id integer,
-      ocupacao_principal_uf_sigla character(2),
-      ocupacao_principal_id integer,
-      CONSTRAINT pk_prof1 PRIMARY KEY (cpf_prof)
-    )
-    """ % competencia
-    executar_SQL(connection, command)
-    print "Tabela profissionais criada"
+    COMMENT ON TABLE cnes_%s.rl_estab_equipamento IS 'EQUIPAMENTOS';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.co_unidade; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.co_unidade IS 'Código do Estabelecimento de Saúde';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.co_equipamento; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.co_equipamento IS 'Código do Equipamento';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.co_tipo_equipamento; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.co_tipo_equipamento IS 'Código do Tipo de Equipamento';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.qt_existente; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.qt_existente IS 'Quantidade de Equipamentos Existentes';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.qt_uso; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.qt_uso IS 'Quantidade de Equipamentos em Uso';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.tp_sus; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.tp_sus IS 'Indica se o Equipamento está disponível para o SUS.
+    1 - Sim
+    2 - Não';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.dt_atualizacao; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.dt_atualizacao IS 'Data da Última Atualização do Registro';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.co_usuario; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.co_usuario IS 'Último Usuário que atualizou o Registro';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.dt_atualizacao_origem; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.dt_atualizacao_origem IS 'Data da Primeira entrada no Banco de Produção Federal';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.dt_cmtp_inicio; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.dt_cmtp_inicio IS 'Data da Primeira entrada ou Data do Retorno no Banco de Produção Federal';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.dt_cmtp_fim; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.dt_cmtp_fim IS 'Data Final de Competência';
+    
+    
+    --
+    -- Name: COLUMN cnes_%s.rl_estab_equipamento.nu_seq_processo; Type: COMMENT; Schema: public; Owner: postgres
+    --
+    
+    COMMENT ON COLUMN cnes_%s.rl_estab_equipamento.nu_seq_processo IS 'Número do Processo da Última Carga';
 
-    command = """
-    CREATE TABLE IF NOT EXISTS cnes_%s.vinculos
-    (
-      cnes character(7) NOT NULL,
-      cbo character(6) NOT NULL,
-      cpf_prof character(11) NOT NULL,
-      vinculac character(6) NOT NULL,
-      vincul_c character(1),
-      vincul_a character(1),
-      vincul_n character(1),
-      prof_sus character(1),
-      profnsus character(1),
-      horaoutr numeric(5,0),
-      horahosp numeric(5,0),
-      hora_amb numeric(5,0),
-      familia_cbo character(4),
-      ocupacao_id integer,
-      CONSTRAINT pk_vinc1 PRIMARY KEY (cpf_prof, cnes, cbo, vinculac)
-    )
     """ % competencia
     executar_SQL(connection, command)
-    print "Tabela vinculos criada"
+    print "Tabeal de relação de equipamentos criada"
 
 
 def conectarBD(dbname, user, host, password, port='5432'):
