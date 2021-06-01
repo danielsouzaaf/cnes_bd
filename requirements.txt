@@ -6,6 +6,6 @@ psycopg2==2.7.1
 pyftp==0.1.1
 requests==2.18.2
 suds==0.4
-urllib3==1.22
+urllib3==1.26.5
 xmltodict==0.11.0
 
